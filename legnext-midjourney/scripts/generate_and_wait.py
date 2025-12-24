@@ -42,14 +42,15 @@ from imagine import submit_imagine_task
 from get_task import get_task_status
 
 
-def generate_and_wait(prompt, poll_interval=5, max_wait_time=300):
+def generate_and_wait(prompt, poll_interval=5, max_wait_time=180, initial_wait=10):
     """
     Submit an image generation task and wait for completion
 
     Args:
         prompt (str): The text prompt for image generation
         poll_interval (int): Seconds to wait between status checks (default: 5)
-        max_wait_time (int): Maximum seconds to wait before timing out (default: 300)
+        max_wait_time (int): Maximum seconds to wait before timing out (default: 180)
+        initial_wait (int): Initial wait before first status check (default: 10)
 
     Returns:
         dict: Final task result or error information
@@ -67,14 +68,15 @@ def generate_and_wait(prompt, poll_interval=5, max_wait_time=300):
     print(f"✓ Task submitted! Job ID: {job_id}")
     print(f"Initial status: {result.get('status')}\n")
 
-    # Step 2: Poll for completion
-    print(f"Step 2: Waiting for completion (checking every {poll_interval}s)...")
+    # Step 2: Initial wait
+    print(f"Step 2: Initial wait ({initial_wait}s)...")
+    time.sleep(initial_wait)
 
-    elapsed = 0
+    # Step 3: Poll for completion
+    print(f"Step 3: Polling for completion (every {poll_interval}s, max {max_wait_time}s)...\n")
+
+    elapsed = initial_wait
     while elapsed < max_wait_time:
-        time.sleep(poll_interval)
-        elapsed += poll_interval
-
         status_result = get_task_status(job_id)
 
         if 'error' in status_result:
@@ -93,10 +95,14 @@ def generate_and_wait(prompt, poll_interval=5, max_wait_time=300):
             print(f"\n✗ Task failed!")
             return status_result
 
+        # Wait before next poll
+        time.sleep(poll_interval)
+        elapsed += poll_interval
+
     # Timeout
     return {
         'error': 'Timeout',
-        'details': f'Task did not complete within {max_wait_time} seconds',
+        'details': f'Task did not complete within {max_wait_time} seconds (typical: 30-80s)',
         'job_id': job_id,
         'last_status': status
     }
@@ -109,8 +115,10 @@ def main():
     parser.add_argument('prompt', help='Text prompt for image generation')
     parser.add_argument('--interval', type=int, default=5,
                        help='Polling interval in seconds (default: 5)')
-    parser.add_argument('--max-wait', type=int, default=300,
-                       help='Maximum wait time in seconds (default: 300)')
+    parser.add_argument('--max-wait', type=int, default=180,
+                       help='Maximum wait time in seconds (default: 180)')
+    parser.add_argument('--initial-wait', type=int, default=10,
+                       help='Initial wait before first check in seconds (default: 10)')
 
     args = parser.parse_args()
 
@@ -131,7 +139,7 @@ def main():
     print("=" * 60)
     print()
 
-    result = generate_and_wait(args.prompt, args.interval, args.max_wait)
+    result = generate_and_wait(args.prompt, args.interval, args.max_wait, args.initial_wait)
 
     print("\n" + "=" * 60)
     print("Final Result:")

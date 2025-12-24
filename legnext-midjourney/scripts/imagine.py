@@ -35,13 +35,12 @@ except ImportError:
     pass
 
 
-def submit_imagine_task(prompt, callback=None):
+def submit_imagine_task(prompt):
     """
     Submit an image generation task to Legnext API
 
     Args:
         prompt (str): The text prompt for image generation (can include Midjourney parameters)
-        callback (str, optional): Webhook URL for task completion notifications
 
     Returns:
         dict: Response containing job_id and status, or error information
@@ -70,8 +69,6 @@ def submit_imagine_task(prompt, callback=None):
     }
 
     payload = {'text': prompt}
-    if callback:
-        payload['callback'] = callback
 
     try:
         # Make API request
@@ -101,15 +98,12 @@ def main():
         sys.exit(1)
 
     prompt = sys.argv[1]
-    callback = sys.argv[2] if len(sys.argv) > 2 else None
 
     print(f"Submitting imagine task...")
     print(f"Prompt: {prompt}")
-    if callback:
-        print(f"Callback: {callback}")
     print()
 
-    result = submit_imagine_task(prompt, callback)
+    result = submit_imagine_task(prompt)
 
     # Pretty print result
     print(json.dumps(result, indent=2))

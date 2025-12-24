@@ -1,9 +1,9 @@
 ---
-name: midjourney-imagine
+name: legnext-midjourney
 description: Generate AI images using Midjourney through the Legnext API. Use this skill when users request Midjourney-style image generation, visual content creation, or ask to create/generate images with natural language descriptions. Handles prompt engineering, API calls, task polling, and result retrieval.
 ---
 
-# Midjourney Imagine
+# Legnext Midjourney
 
 Generate professional AI images using Midjourney's capabilities through the Legnext API.
 
@@ -32,8 +32,12 @@ export LEGNEXT_API_KEY=your-api-key-here
 ### Get an API key from:
 **https://legnext.ai/app/api-keys**
 
-### Verification:
-The scripts will automatically detect the `.env` file and provide clear error messages if the API key is missing.
+### Verify API key:
+```bash
+python scripts/verify_api_key.py
+```
+
+The scripts will automatically detect the `.env` file and provide clear error messages if the API key is missing or invalid.
 
 ## Quick Start
 
@@ -258,17 +262,21 @@ For variations of the same concept:
 
 ## Scripts
 
-This skill provides three Python scripts:
+This skill provides four Python scripts:
 
-1. **generate_and_wait.py** - Complete workflow (recommended)
+1. **verify_api_key.py** - Verify API key
+   - Check API key validity and account balance
+   - Usage: `python scripts/verify_api_key.py`
+
+2. **generate_and_wait.py** - Complete workflow (recommended)
    - Submits task and waits for completion
    - Usage: `python scripts/generate_and_wait.py "prompt"`
 
-2. **imagine.py** - Submit generation task
+3. **imagine.py** - Submit generation task
    - Returns job_id immediately
    - Usage: `python scripts/imagine.py "prompt"`
 
-3. **get_task.py** - Check task status
+4. **get_task.py** - Check task status
    - Query any task by job_id
    - Usage: `python scripts/get_task.py <job_id>`
 
@@ -285,8 +293,9 @@ All scripts require `LEGNEXT_API_KEY` environment variable.
 
 ## Notes
 
-- Generation typically takes 30-90 seconds
-- Complex prompts or high quality settings may take longer
+- Generation typically takes 30-80 seconds
+- Initial wait: 10s before first status check
+- Polling: Every 5s, timeout after 3 minutes
 - Each request usually generates 4 image variations
 - Images are temporarily stored; download for permanent use
 - API usage is tracked via points system in Legnext dashboard
