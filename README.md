@@ -30,6 +30,29 @@ Expert Midjourney prompt engineering guidance without API integration.
 
 ---
 
+## Installation
+
+### Quick Install
+
+**1. Download the skills you need:**
+   - [legnext-midjourney.zip](../../raw/main/legnext-midjourney.zip) - Image generation via Legnext API
+   - [midjourney-prompting.zip](../../raw/main/midjourney-prompting.zip) - Prompt engineering only
+
+**2. Unzip to Claude skills directory:**
+```bash
+# For legnext-midjourney (with API)
+unzip legnext-midjourney.zip -d ~/.claude/skills/
+
+# For midjourney-prompting (no API needed)
+unzip midjourney-prompting.zip -d ~/.claude/skills/
+```
+
+**3. Restart Claude Code** (if running)
+
+That's it! The skills are now available in Claude Code.
+
+---
+
 ## Setup
 
 ### For legnext-midjourney
@@ -59,6 +82,40 @@ python scripts/verify_api_key.py
 ### For midjourney-prompting
 
 No setup required.
+
+---
+
+## Usage
+
+### Using legnext-midjourney
+
+Once installed and configured, simply ask Claude Code to generate images:
+
+```
+User: "Generate a professional headshot with studio lighting"
+Claude: *Uses legnext-midjourney skill to create optimized prompt and generate image*
+```
+
+Or use the scripts directly:
+```bash
+# Complete workflow (recommended)
+cd ~/.claude/skills/legnext-midjourney
+python scripts/generate_and_wait.py "a majestic lion in savanna, golden hour --ar 16:9 --v 7"
+
+# Check account balance
+python scripts/verify_api_key.py
+```
+
+### Using midjourney-prompting
+
+Ask Claude Code for prompt engineering help:
+
+```
+User: "I need a cyberpunk city scene for a poster"
+Claude: *Uses midjourney-prompting skill to craft optimized Midjourney prompt*
+```
+
+The skill will convert your natural language request into an effective Midjourney prompt with appropriate parameters.
 
 ---
 
