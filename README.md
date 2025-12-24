@@ -30,19 +30,6 @@ Expert Midjourney prompt engineering guidance without API integration.
 
 ---
 
-## Installation
-
-
-Then: Browse and install plugins → legnext-midjourney-imagine → Select skill → Install now
-
-### Manual Installation
-
-```bash
-# Download skill .zip from releases
-unzip legnext-midjourney.zip -d ~/.claude/skills/
-unzip midjourney-prompting.zip -d ~/.claude/skills/
-```
-
 ## Setup
 
 ### For legnext-midjourney
